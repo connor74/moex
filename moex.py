@@ -13,6 +13,7 @@ class Reprice:
             'bonds': ['EQOB', 'TQCB', 'TQOB']
         }
         self.sec_type = ""
+        
 
     def secid_from_csv(self, file, header=None):
         '''
@@ -25,6 +26,7 @@ class Reprice:
             print(f"Error! File: {file} is not found:")   
         self.secid = list(df.iloc[:, 0])
 
+
     def secid_from_excel(self, file, sheet=0, header=None):
         '''
         Getting SECID from xls/xlsx file, without headers.
@@ -35,9 +37,11 @@ class Reprice:
         except FileNotFoundError:
             print(f"Error! File: {file} is not found:")  
         self.secid = list(df.iloc[:, 0])
+
     
     def secid_from_list(self, secid_list):
         self.secid = secid_list
+
 
     def __get_securities(self, sec_type, columns, boards):
         '''
@@ -59,17 +63,19 @@ class Reprice:
                 row_ = jsn['history']['data']
             row = [*row, *row_]
         return pd.DataFrame(row, columns = jsn['history']['columns'])[columns]
+
     
     def get_stocks(self):
         columns = ['SECID', 'TRADEDATE', 'BOARDID', 'SHORTNAME', 'MARKETPRICE3']
         self.df = self.__get_securities('shares', columns, self.boards['stocks'])
+
 
     def get_bonds(self):
         columns = ['SECID', 'TRADEDATE', 'BOARDID', 'SHORTNAME', 'MARKETPRICE3', 'ACCINT']
         self.df = self.__get_securities('bonds', columns, self.boards['bonds'])
 
 
-    def to_csv(self, output_path="", file_name=""):
+    def to_csv(self, output_path="", file_name="data"):
         try:
             self.df.to_csv(f'{output_path}{file_name}_{self.sec_type}_{self.date}.csv', sep=';', encoding='utf-8-sig', index=False)
         except PermissionError:
@@ -84,4 +90,16 @@ class Reprice:
         else:
             return self.df
         return self.df
+
+class GCurve:
+    def __init__(self, date):
+        self.date = date
+        self.secid_list = []
+
+    def get_isin_list(self):
+        pass
+
+    def get_secid_list(self):
+        pass
+
 
