@@ -3,4 +3,7 @@
 *.csv
 *.xlsx
 *.xls
+*.x*
 main.py
+script.py
+.ipynb_checkpoints/Untitled-checkpoint.ipynb
