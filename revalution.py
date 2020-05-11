@@ -5,30 +5,40 @@ import requests
 class Reprice:
 #
 # Выгрузка переоценки акций, переоценки облигаций и купонов
-# 
-    def __init__(self, date, output_path='N:\\AvdeevKB\\Общее\\', secid_path='N:\\AvdeevKB\\Общее\\'):
+# N:\\AvdeevKB\\Общее\\
+# secid_file = "Портфель ценных бумаг Банка.xlsx"
+#
+
+    def __init__(self, date):
         self.secid = [] # Список isin бумаг портфеля
         self.date = date # Дата на которую нужно переоценить актив, формата YYYY-MM-DD
-        self.output_path = output_path # Путь куда сохранять файлы
-        self.secid_path = secid_path # Путь куда сохранять файлы
-        self.secid_file = "Портфель ценных бумаг Банка.xlsx"
         self.boards = {
             'stocks': 'TQBR',
             'bonds': ['EQOB', 'TQCB', 'TQOB']
         }
-               
-       
-    def read_secid(self, sheet_name):
-        self.secid = pd.read_excel(self.secid_path+self.secid_file, sheet_name=sheet_name)
-        
-        try:
-            self.secid = pd.read_excel(self.secid_path+self.secid_file, sheet_name=sheet_name)        
-        except FileNotFoundError:
-            print(f"Ошибка! Не найден файл: {self.sheet_name}_{self.date}.csv")  
+
+    def secid_from_csv(self, file, header=None):
+        '''
+        Getting SECID from csv file, without headers.
+        Data in first column
+        '''
+        df = pd.read_csv(file, header=header)
+        self.secid = list(df.iloc[:, 0])
+
+    def secid_from_excel(self, file):
+        '''
+        Getting SECID from xls/xlsx file, without headers.
+        Data in first column
+        '''
+        df = pd.read_excel(file)
+        self.secid = list(df.iloc[:, 0])
     
+    def secid_from_list(self, secid_list):
+        self.secid = secid_list
+  
     
     def get_stocks(self, dealer = True):
-        
+
         df_ = pd.DataFrame()
         if dealer:
             self.sheet_name = "dealer_stocks"
@@ -81,7 +91,7 @@ class Reprice:
         self.df = df_[['SECID', 'TRADEDATE', 'BOARDID', 'SHORTNAME', 'MARKETPRICE3', 'ACCINT']]
         
         
-    def to_csv(self):
+    def to_csv(self, output_path):
         '''
         Выгрузка в формате csv
         '''
