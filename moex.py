@@ -25,13 +25,13 @@ class Reprice:
             print(f"Error! File: {file} is not found:")   
         self.secid = list(df.iloc[:, 0])
 
-    def secid_from_excel(self, file, header=None):
+    def secid_from_excel(self, file, sheet=0, header=None):
         '''
         Getting SECID from xls/xlsx file, without headers.
         Data in first column
         '''
         try:
-            df = pd.read_excel(file, header=header)
+            df = pd.read_excel(file, sheet_name=sheet, header=header)
         except FileNotFoundError:
             print(f"Error! File: {file} is not found:")  
         self.secid = list(df.iloc[:, 0])
