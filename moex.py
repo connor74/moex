@@ -13,7 +13,7 @@ class Reprice:
             'bonds': ['EQOB', 'TQCB', 'TQOB']
         }
         self.sec_type = ""
-        
+
 
     def secid_from_csv(self, file, header=None):
         '''
@@ -44,9 +44,6 @@ class Reprice:
 
 
     def __get_securities(self, sec_type, columns, boards):
-        '''
-        Получение с биржи рыночных котировок акций
-        '''
         if self.secid == []: raise ValueError("SECID is empty!")
 
         self.sec_type = sec_type
@@ -67,7 +64,7 @@ class Reprice:
     
     def get_stocks(self):
         columns = ['SECID', 'TRADEDATE', 'BOARDID', 'SHORTNAME', 'MARKETPRICE3']
-        self.df = self.__get_securities('shares', columns, self.boards['stocks'])
+        self.df = self.__get_securities('shares', columns, self.boards['shares'])
 
 
     def get_bonds(self):
